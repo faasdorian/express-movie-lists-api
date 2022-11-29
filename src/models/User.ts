@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from "typeorm";
+import { AccessToken } from "./AccessToken";
 
 @Entity()
 export class User {
@@ -16,4 +17,7 @@ export class User {
 
   @Column({ type: "timestamp", nullable: true })
   updatedAt: Date;
+
+  @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
+  accessTokens: AccessToken[];
 }
