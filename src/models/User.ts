@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from "typeorm";
-import { AccessToken } from "./AccessToken";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { List } from "./List";
 
 @Entity()
 export class User {
@@ -18,6 +18,6 @@ export class User {
   @Column({ type: "timestamp", nullable: true })
   updatedAt: Date;
 
-  @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
-  accessTokens: AccessToken[];
+  @OneToMany(() => List, (movieList) => movieList.user)
+  movieLists: List[];
 }
