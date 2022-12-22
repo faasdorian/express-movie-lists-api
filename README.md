@@ -4,10 +4,8 @@
 
 - [Express](https://expressjs.com/)
 - [TypeORM](https://typeorm.io/#/)
-- [pg](https://www.npmjs.com/package/pg)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
-- [dotenv](https://www.npmjs.com/package/dotenv)
 
 
 ## How to run the project locally
@@ -37,3 +35,13 @@
   }
   ```
   An access token will be returned in the response body, which will be used to access the other routes.
+
+### List
+
+- `POST /list` - Create a new list
+  ```
+  {
+    "title": "my list",
+    "privacy": "public" | "private"
+  }
+  ```
