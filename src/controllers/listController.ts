@@ -9,7 +9,8 @@ export const createList = async (req: Request, res: Response, next: NextFunction
   const { userId } = req;
   const { title, privacy } = req.body;
 
-  if (title.length < 3) return next(new BadRequestError("Title must be at least 3 characters long"));
+  const titleRegex = /\w{3,}/
+  if (!titleRegex.test(title)) return next(new BadRequestError("Title must be at least 3 characters long"));
   if (!listPrivacyTypes.includes(privacy)) return next(new BadRequestError("Invalid privacy type"));
 
   const queryRunner = AppDataSource.createQueryRunner();
@@ -21,7 +22,7 @@ export const createList = async (req: Request, res: Response, next: NextFunction
     const userRepository = queryRunner.manager.getRepository(User);
 
     const list = new List();
-    list.title = title;
+    list.title = title.trim();
     list.privacy = privacy;
 
     const user = await userRepository.findOne({ where: { id: userId } });
