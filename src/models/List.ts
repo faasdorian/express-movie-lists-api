@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import listPrivacyTypes from "../types/listPrivacyTypes";
 import { Item } from "./Item";
 import { User } from "./User";
 
@@ -13,7 +12,7 @@ export class List {
 
   @Column({
     type: "enum",
-    enum: listPrivacyTypes,
+    enum: ['public', 'private'],
     default: "public"
   })
   privacy: string;

@@ -1,7 +1,7 @@
 import express from "express";
 import exceptionHandler from "./middleware/exceptionHandler";
-import auth from "./routes/auth";
-import list from "./routes/list";
+import auth from "./routes/auth.route";
+import list from "./routes/list.route";
 
 const app = express();
 
