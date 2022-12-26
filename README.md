@@ -45,3 +45,9 @@
     "privacy": "public" | "private"
   }
   ```
+- `GET /list` - Get lists
+    - Query parameters:
+      - userId: get a specific user public lists
+      - page
+      - limit
+    - All lists (private and public) from the logged user will be returned if no userId is specified
