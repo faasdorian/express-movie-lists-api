@@ -18,6 +18,12 @@ export class List {
   })
   privacy: string;
 
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  createdAt: Date;
+
+  @Column({ type: "timestamp", nullable: true })
+  updatedAt: Date;
+
   @ManyToOne(() => User, (user) => user.movieLists)
   user: User;
 
