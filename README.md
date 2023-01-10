@@ -1,5 +1,10 @@
 # movies-list
 
+## Description
+
+This is a simple API to manage movies lists. It was developed using Node.js, Express and TypeORM.
+The idea is to keep this project as simple as possible, so it can be used as a reference for future projects, always adding new features and improving the code.
+
 ## Packages used
 
 - [Express](https://expressjs.com/)
@@ -51,3 +56,10 @@
       - page
       - limit
     - All lists (private and public) from the logged user will be returned if no userId is specified
+
+- `POST /list/:listId/items` - Add items to a list
+   ```
+   {
+     "moviesIds": ["id1", "id2", "id3"]
+   }
+   ```
