@@ -39,3 +39,12 @@ export class BadRequestError implements ApiError {
     readonly source?: Error
   ) { }
 }
+
+export class ForbiddenError implements ApiError {
+  readonly statusCode = 403
+
+  constructor(
+    readonly message: string | string[] = 'Forbidden',
+    readonly source?: Error
+  ) { }
+}
