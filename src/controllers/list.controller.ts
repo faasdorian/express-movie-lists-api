@@ -51,7 +51,6 @@ export const getLists = async (req: Request, res: Response, next: NextFunction) 
   const queryRunner = AppDataSource.createQueryRunner();
   try {
     await queryRunner.connect();
-    await queryRunner.startTransaction();
 
     const query = queryRunner.manager.getRepository(List)
       .createQueryBuilder('list')
@@ -74,6 +73,28 @@ export const getLists = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
+export const getListById = async (req: Request, res: Response, next: NextFunction) => {
+  const tokenUserId = req.userId;
+  const { listId } = req.params;
+
+  const queryRunner = AppDataSource.createQueryRunner();
+  try {
+    await queryRunner.connect();
+
+    const listRepository = queryRunner.manager.getRepository(List);
+    const list = await listRepository.findOne({ where: { id: listId }, relations: ['user', 'items', 'items.movie'] });
+    if (!list) return next(new NotFoundError("List not found"));
+
+    if (list.privacy === 'private' && list.user.id !== tokenUserId) return next(new ForbiddenError());
+
+    return res.status(200).json({ ...list, user: undefined });
+  } catch (error) {
+    await queryRunner.release();
+    console.log(error);
+    next(new InternalServerError());
+  }
+}
+
 export const addItemsToList = async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req;
   const { listId } = req.params;
@@ -86,25 +107,29 @@ export const addItemsToList = async (req: Request, res: Response, next: NextFunc
 
     const listRepository = queryRunner.manager.getRepository(List);
 
-    const list = await listRepository.findOne({ where: { id: listId }, relations: ['user'] });
+    const list = await listRepository.findOne({ where: { id: listId }, relations: ['user', 'items', 'items.movie'] });
     if (!list) return next(new NotFoundError("List not found"));
 
     if (list.user.id !== userId) return next(new ForbiddenError());
 
+    if (list.items.length + moviesIds.length > 50) return next(new ForbiddenError("You can't add more than 50 items to a list"));
+
     const movieRepository = queryRunner.manager.getRepository(Movie);
     const movies = await movieRepository.find({ where: { id: In(moviesIds) } });
-    if (movies.length !== moviesIds.length) return next(new NotFoundError("Movie not found"));
 
     const itemsRepository = queryRunner.manager.getRepository(Item);
     const items: Item[] = [];
     movies.forEach(movie => {
+      const movieInList = list.items.find(item => item.movie.id === movie.id);
+      if (!movieInList) {
+        const item = new Item();
 
-      const item = new Item();
-      item.movie = movie;
-      item.list = list;
-      item.createdAt = new Date();
+        item.movie = movie;
+        item.list = list;
+        item.createdAt = new Date();
 
-      items.push(item);
+        items.push(item);
+      }
     });
 
     await itemsRepository.save(items);

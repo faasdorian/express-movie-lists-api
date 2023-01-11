@@ -8,8 +8,8 @@ const validateItems = checkSchema({
     },
 
     isArray: {
-      errorMessage: "Must be an 1-20 items array",
-      options: { min: 1, max: 20 }
+      errorMessage: "Must be an 1-50 items array",
+      options: { min: 1, max: 50 }
     },
 
     custom: {
