@@ -50,6 +50,15 @@ The idea is to keep this project as simple as possible, so it can be used as a r
     "privacy": "public" | "private"
   }
   ```
+
+- `PUT /list/:listId` - Update a list
+  ```
+  {
+    "title": "my list",
+    "privacy": "public" | "private"
+  }
+  ```
+
 - `GET /list` - Get lists
     - Query parameters:
       - userId: get a specific user public lists
@@ -67,5 +76,12 @@ The idea is to keep this project as simple as possible, so it can be used as a r
      "moviesIds": ["id1", "id2", "id3"]
    }
    ```
+
+- `PUT /list/:listId/items/:itemId` - Update an item from a list
+   ```
+   {
+     "watched": true
+   }
+   ``
 
 - `DELETE /list/:listId/items/:itemId` - Remove an item from a list

@@ -9,7 +9,7 @@ export class Item {
   id: string;
 
   @Column({ type: "boolean", default: false })
-  checked: boolean;
+  watched: boolean;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
