@@ -2,6 +2,16 @@ import { checkSchema } from "express-validator";
 import { validate as uuidValidate } from "uuid";
 
 const validateItems = checkSchema({
+  listId: {
+    exists: {
+      options: { checkFalsy: true }
+    },
+
+    isUUID: {
+      errorMessage: "Must be a valid uuid"
+    }
+  },
+
   moviesIds: {
     exists: {
       options: { checkFalsy: true }

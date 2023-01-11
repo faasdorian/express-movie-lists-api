@@ -11,3 +11,5 @@ const validateItems = checkSchema({
     }
   }
 });
+
+export default validateItems;

@@ -3,11 +3,8 @@ import {
   createList,
   getLists,
   getListById,
-  addItemsToList,
   deleteList,
-  deleteItem,
-  updateList,
-  updateItem
+  updateList
 } from "../controllers/list.controller";
 import checkValidation from "../middleware/checkValidation";
 import verifyJwt from "../middleware/verifyJwt";
@@ -23,8 +20,5 @@ router.put("/:listId", verifyJwt, updateListValidation, checkValidation, updateL
 router.delete("/:listId", verifyJwt, deleteList);
 router.get("/", verifyJwt, getLists);
 router.get("/:listId", verifyJwt, getListById);
-router.post("/:listId/items", verifyJwt, createItemValidation, checkValidation, addItemsToList);
-router.put("/:listId/items/:itemId", verifyJwt, updateListValidation, checkValidation, updateItem);
-router.delete("/:listId/items/:itemId", verifyJwt, deleteItem);
 
 export default router;
