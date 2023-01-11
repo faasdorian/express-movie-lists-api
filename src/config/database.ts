@@ -2,7 +2,9 @@ import "reflect-metadata";
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
 import { User } from "../models/User";
-import { AccessToken } from "../models/AccessToken";
+import { Movie } from "../models/Movie";
+import { List } from "../models/List";
+import { Item } from "../models/Item";
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, AccessToken],
+  entities: [User, Movie, List, Item],
   synchronize: true,
   logging: false,
 });
