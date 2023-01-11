@@ -66,22 +66,26 @@ The idea is to keep this project as simple as possible, so it can be used as a r
       - limit
     - All lists (private and public) from the logged user will be returned if no userId is specified
 
-- `GET /list/:listId` - Get a specific list
+- `GET /list/:listId` - Get a specific list with its items
 
 - `DELETE /list/:listId` - Delete a list
 
-- `POST /list/:listId/items` - Add items to a list
+
+### Items
+
+- `POST /items` - Add items to a list
    ```
    {
+     "listId": "listId",
      "moviesIds": ["id1", "id2", "id3"]
    }
    ```
 
-- `PUT /list/:listId/items/:itemId` - Update an item from a list
+- `PUT /items/:itemId` - Update an item from a list
    ```
    {
      "watched": true
    }
    ``
 
-- `DELETE /list/:listId/items/:itemId` - Remove an item from a list
+- `DELETE /items/:itemId` - Remove an item from a list
