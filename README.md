@@ -59,9 +59,13 @@ The idea is to keep this project as simple as possible, so it can be used as a r
 
 - `GET /list/:listId` - Get a specific list
 
+- `DELETE /list/:listId` - Delete a list
+
 - `POST /list/:listId/items` - Add items to a list
    ```
    {
      "moviesIds": ["id1", "id2", "id3"]
    }
    ```
+
+- `DELETE /list/:listId/items/:itemId` - Remove an item from a list

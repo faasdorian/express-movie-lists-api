@@ -38,6 +38,37 @@ export const createList = async (req: Request, res: Response, next: NextFunction
   }
 }
 
+export const deleteList = async (req: Request, res: Response, next: NextFunction) => {
+  const { listId } = req.params;
+  const { userId } = req;
+
+  const queryRunner = AppDataSource.createQueryRunner();
+  try {
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    const listRepository = queryRunner.manager.getRepository(List);
+    const list = await listRepository.findOne({ where: { id: listId }, relations: ['user'] });
+    if (!list) return next(new NotFoundError("List not found"));
+
+    if (list.user.id !== userId) return next(new ForbiddenError());
+
+    const itemRepository = queryRunner.manager.getRepository(Item);
+    await itemRepository.delete({ list: list });
+
+    await listRepository.remove(list);
+
+    await queryRunner.commitTransaction();
+    await queryRunner.release();
+
+    return res.status(200).json({ message: "List deleted successfully" });
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+    console.log(error);
+    return next(new InternalServerError());
+  }
+}
+
 export const getLists = async (req: Request, res: Response, next: NextFunction) => {
   const tokenUserId = req.userId;
   const { page, limit, userId: queryUserId } = req.query;
@@ -138,6 +169,38 @@ export const addItemsToList = async (req: Request, res: Response, next: NextFunc
     await queryRunner.release();
 
     return res.status(200).json({ message: "Items added successfully" });
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+    await queryRunner.release();
+    return next(new InternalServerError());
+  }
+}
+
+export const deleteItem = async (req: Request, res: Response, next: NextFunction) => {
+  const { userId } = req;
+  const { listId, itemId } = req.params;
+
+  const queryRunner = AppDataSource.createQueryRunner();
+  try {
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    const listRepository = queryRunner.manager.getRepository(List);
+    const list = await listRepository.findOne({ where: { id: listId }, relations: ['user'] });
+    if (!list) return next(new NotFoundError("List not found"));
+
+    if (list.user.id !== userId) return next(new ForbiddenError());
+
+    const itemRepository = queryRunner.manager.getRepository(Item);
+    const item = await itemRepository.findOne({ where: { id: itemId } });
+    if (!item) return next(new NotFoundError("Item not found"));
+
+    await itemRepository.remove(item);
+
+    await queryRunner.commitTransaction();
+    await queryRunner.release();
+
+    return res.status(200).json({ message: "Item deleted successfully" });
   } catch (error) {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
