@@ -15,9 +15,8 @@ export class NotFoundError implements ApiError {
 
 export class InternalServerError implements ApiError {
   readonly statusCode = 500
-
+  readonly message: string = 'Something went wrong'
   constructor(
-    readonly message: string | string[] = 'Something went wrong',
     readonly source?: Error | undefined
   ) { }
 }

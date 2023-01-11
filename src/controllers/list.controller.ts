@@ -34,7 +34,7 @@ export const createList = async (req: Request, res: Response, next: NextFunction
     return res.status(201).json({ message: "List created successfully" });
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }
 
@@ -64,7 +64,7 @@ export const updateList = async (req: Request, res: Response, next: NextFunction
     return res.status(200).json({ message: "List updated successfully" });
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }
 
@@ -94,7 +94,7 @@ export const deleteList = async (req: Request, res: Response, next: NextFunction
     return res.status(200).json({ message: "List deleted successfully" });
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }
 
@@ -129,7 +129,7 @@ export const getLists = async (req: Request, res: Response, next: NextFunction) 
     return res.status(200).json({ lists, totalCount, totalPages: Math.ceil(totalCount / limitNumber) });
   } catch (error) {
     await queryRunner.release();
-    next(new InternalServerError());
+    next(new InternalServerError(error as Error));
   }
 }
 
@@ -150,7 +150,7 @@ export const getListById = async (req: Request, res: Response, next: NextFunctio
     return res.status(200).json({ ...list, user: undefined });
   } catch (error) {
     await queryRunner.release();
-    next(new InternalServerError());
+    next(new InternalServerError(error as Error));
   }
 }
 
@@ -200,7 +200,7 @@ export const addItemsToList = async (req: Request, res: Response, next: NextFunc
   } catch (error) {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }
 
@@ -234,7 +234,7 @@ export const updateItem = async (req: Request, res: Response, next: NextFunction
   } catch (error) {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }
 
@@ -266,6 +266,6 @@ export const deleteItem = async (req: Request, res: Response, next: NextFunction
   } catch (error) {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
-    return next(new InternalServerError());
+    return next(new InternalServerError(error as Error));
   }
 }

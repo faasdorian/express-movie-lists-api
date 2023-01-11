@@ -1,6 +1,7 @@
 
 import { NextFunction, Request, Response } from 'express'
 import ApiException from '../helpers/exceptions'
+import { logger } from '../helpers/logger'
 
 export default (
   error: ApiException,
@@ -8,7 +9,7 @@ export default (
   res: Response,
   next: NextFunction
 ) => {
-  if (error.source) console.error(error.source);
+  if (error.statusCode == 500) logger.error(error.source?.stack);
 
   return res.status(error.statusCode).json({
     status: 'error',
