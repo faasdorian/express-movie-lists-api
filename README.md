@@ -57,6 +57,8 @@ The idea is to keep this project as simple as possible, so it can be used as a r
       - limit
     - All lists (private and public) from the logged user will be returned if no userId is specified
 
+- `GET /list/:listId` - Get a specific list
+
 - `POST /list/:listId/items` - Add items to a list
    ```
    {
