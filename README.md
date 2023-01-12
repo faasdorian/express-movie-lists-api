@@ -121,3 +121,19 @@ The idea is to keep this project as simple as possible, so it can be used as a r
       - limit
   
   The movie routes will be used to search for movies in the future and add more information about a movie.
+
+## TODO
+
+- [ ] Add tests
+- [ ] Add swagger
+- [ ] Add pagination to movies route
+- [ ] Add search for movies
+- [ ] Add more information about movies
+- [ ] Add more information about lists
+- [ ] Add more information about items
+- [ ] Add more information about users
+
+## Final considerations
+This project was developed to learn more about Node.js and TypeORM. If it can help someone, it will be great.
+<br>If you find any bugs or have any suggestions, feel free to open an issue or make a pull request.
+<br>Hope you enjoy it and if you want to star it i'll be very happy :D
