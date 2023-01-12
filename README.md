@@ -102,3 +102,22 @@ The idea is to keep this project as simple as possible, so it can be used as a r
    ``
 
 - `DELETE /items/:itemId` - Remove an item from a list
+
+### Movie
+
+- `POST /movie`
+  ```
+  {
+    "title": "movie title"
+  }
+  ```
+  Only admin users can add new movies to the database.
+  In the future, this route will be integrated with the [OMDb API](http://www.omdbapi.com/) to get the movie information.
+
+- `GET /movie` - Get movies
+    - Query parameters:
+      - title: get a specific movie
+      - page
+      - limit
+  
+  The movie routes will be used to search for movies in the future and add more information about a movie.
