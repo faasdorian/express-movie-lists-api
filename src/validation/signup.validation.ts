@@ -14,7 +14,7 @@ const validateSignup = checkSchema({
     },
     isLength: {
       errorMessage: 'Username must have 3-20 characters',
-      options: { min: 8, max: 35 }
+      options: { min: 3, max: 20 }
     }
   },
   password: {
@@ -25,6 +25,10 @@ const validateSignup = checkSchema({
     isStrongPassword: {
       errorMessage: 'Password must be strong (1 uppercase, 1 lowercase, 1 number, and 1 special character)'
     }
+  },
+  isAdmin: {
+    optional: true,
+    isBoolean: { errorMessage: "isAdmin must be a boolean" }
   }
 });
 

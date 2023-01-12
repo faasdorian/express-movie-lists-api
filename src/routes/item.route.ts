@@ -2,8 +2,8 @@ import { Router } from "express";
 import { addItemsToList, deleteItem, updateItem } from "../controllers/item.controller";
 import checkValidation from "../middleware/checkValidation";
 import verifyJwt from "../middleware/verifyJwt";
-import createItemValidation from "../validation/createItems.validation";
-import updateItemValidation from "../validation/updateItem.validation";
+import createItemValidation from "../validation/item/createItems.validation";
+import updateItemValidation from "../validation/item/updateItem.validation";
 
 
 const router = Router();

@@ -8,7 +8,7 @@ import { Movie } from "../models/Movie";
 
 
 export const addItemsToList = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
   const { moviesIds, listId } = req.body;
 
   const queryRunner = AppDataSource.createQueryRunner();
@@ -21,7 +21,7 @@ export const addItemsToList = async (req: Request, res: Response, next: NextFunc
     const list = await listRepository.findOne({ where: { id: listId }, relations: ['user', 'items', 'items.movie'] });
     if (!list) return next(new NotFoundError("List not found"));
 
-    if (list.user.id !== userId) return next(new ForbiddenError());
+    if (list.user.id !== tokenUserId) return next(new ForbiddenError());
 
     if (list.items.length + moviesIds.length > 50) return next(new ForbiddenError("You can't add more than 50 items to a list"));
 
@@ -56,7 +56,7 @@ export const addItemsToList = async (req: Request, res: Response, next: NextFunc
 }
 
 export const updateItem = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
   const { itemId } = req.params;
   const { watched } = req.body;
 
@@ -71,7 +71,7 @@ export const updateItem = async (req: Request, res: Response, next: NextFunction
 
     if (!item.list) return next(new NotFoundError("List not found"));
 
-    if (item.list.user.id !== userId) return next(new ForbiddenError());
+    if (item.list.user.id !== tokenUserId) return next(new ForbiddenError());
 
     item.watched = watched ?? item.watched;
     await itemRepository.save(item);
@@ -88,7 +88,7 @@ export const updateItem = async (req: Request, res: Response, next: NextFunction
 }
 
 export const deleteItem = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
   const { itemId } = req.params;
 
   const queryRunner = AppDataSource.createQueryRunner();
@@ -102,7 +102,7 @@ export const deleteItem = async (req: Request, res: Response, next: NextFunction
     if (!item) return next(new NotFoundError("Item not found"));
     if (!item.list) return next(new NotFoundError("List not found"));
 
-    if (item.list.user.id !== userId) return next(new ForbiddenError());
+    if (item.list.user.id !== tokenUserId) return next(new ForbiddenError());
 
     await itemRepository.remove(item);
 

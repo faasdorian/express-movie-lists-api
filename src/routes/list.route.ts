@@ -8,9 +8,8 @@ import {
 } from "../controllers/list.controller";
 import checkValidation from "../middleware/checkValidation";
 import verifyJwt from "../middleware/verifyJwt";
-import createItemValidation from "../validation/createItems.validation";
-import createListValidation from "../validation/createList.validation";
-import updateListValidation from "../validation/updateList.validation";
+import createListValidation from "../validation/list/createList.validation";
+import updateListValidation from "../validation/list/updateList.validation";
 
 
 const router = Router();
