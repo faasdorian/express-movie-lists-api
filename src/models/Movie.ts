@@ -8,4 +8,7 @@ export class Movie {
   @Column({ unique: true })
   title: string;
 
+  @Column()
+  addedBy: string;
+
 }

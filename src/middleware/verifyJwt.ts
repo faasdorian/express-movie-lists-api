@@ -10,7 +10,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
 
-    req.user = { id: decoded.id, role: decoded.role };
+    req.user = { id: decoded.id, username: decoded.username, role: decoded.role };
 
     next();
   } catch (error) {
@@ -26,7 +26,7 @@ export const verifyJwtNoMandatory = async (req: Request, res: Response, next: Ne
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
 
-    req.user = { id: decoded.id, role: decoded.role };
+    req.user = { id: decoded.id, username: decoded.username, role: decoded.role };
 
     next();
   } catch (error) {
