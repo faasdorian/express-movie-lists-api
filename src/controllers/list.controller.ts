@@ -7,7 +7,7 @@ import { User } from "../models/User";
 
 
 export const createList = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
   const { title, privacy } = req.body;
 
   const queryRunner = AppDataSource.createQueryRunner();
@@ -22,7 +22,7 @@ export const createList = async (req: Request, res: Response, next: NextFunction
     list.title = title;
     list.privacy = privacy;
 
-    const user = await userRepository.findOne({ where: { id: userId } });
+    const user = await userRepository.findOne({ where: { id: tokenUserId } });
     if (!user) return next(new NotFoundError("User not found"));
     list.user = user!;
 
@@ -39,7 +39,7 @@ export const createList = async (req: Request, res: Response, next: NextFunction
 
 export const updateList = async (req: Request, res: Response, next: NextFunction) => {
   const { listId } = req.params;
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
   const { title, privacy } = req.body;
 
   const queryRunner = AppDataSource.createQueryRunner();
@@ -51,7 +51,7 @@ export const updateList = async (req: Request, res: Response, next: NextFunction
     const list = await listRepository.findOne({ where: { id: listId }, relations: ['user'] });
     if (!list) return next(new NotFoundError("List not found"));
 
-    if (list.user.id !== userId) return next(new ForbiddenError());
+    if (list.user.id !== tokenUserId) return next(new ForbiddenError());
 
     list.title = title ?? list.title;
     list.privacy = privacy ?? list.privacy;
@@ -69,7 +69,7 @@ export const updateList = async (req: Request, res: Response, next: NextFunction
 
 export const deleteList = async (req: Request, res: Response, next: NextFunction) => {
   const { listId } = req.params;
-  const { userId } = req;
+  const { id: tokenUserId } = req.user!;
 
   const queryRunner = AppDataSource.createQueryRunner();
   try {
@@ -80,7 +80,7 @@ export const deleteList = async (req: Request, res: Response, next: NextFunction
     const list = await listRepository.findOne({ where: { id: listId }, relations: ['user'] });
     if (!list) return next(new NotFoundError("List not found"));
 
-    if (list.user.id !== userId) return next(new ForbiddenError());
+    if (list.user.id !== tokenUserId) return next(new ForbiddenError());
 
     const itemRepository = queryRunner.manager.getRepository(Item);
     await itemRepository.delete({ list: list });
@@ -98,7 +98,7 @@ export const deleteList = async (req: Request, res: Response, next: NextFunction
 }
 
 export const getLists = async (req: Request, res: Response, next: NextFunction) => {
-  const tokenUserId = req.userId;
+  const { id: tokenUserId } = req.user!;
   const { page, limit, userId: queryUserId } = req.query;
 
   const pageNumber = page ? parseInt(page as string) : 1;
@@ -133,7 +133,7 @@ export const getLists = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const getListById = async (req: Request, res: Response, next: NextFunction) => {
-  const tokenUserId = req.userId;
+  const { id: tokenUserId } = req.user!;
   const { listId } = req.params;
 
   const queryRunner = AppDataSource.createQueryRunner();

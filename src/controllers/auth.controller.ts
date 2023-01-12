@@ -6,7 +6,8 @@ import { User } from "../models/User";
 import { BadRequestError, InternalServerError, NotFoundError } from "../helpers/exceptions";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, password } = req.body;
+  const { username, password, isAdmin } = req.body;
+  const tokenUserRole = req.user?.role ?? "user";
 
   const queryRunner = AppDataSource.createQueryRunner();
   try {
@@ -15,6 +16,9 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 
     const userRepository = queryRunner.manager.getRepository(User);
 
+    if (tokenUserRole !== "admin" && isAdmin)
+      return next(new BadRequestError("Only admins can create admin users"));
+
     if (await userRepository.findOne({ where: { username } }))
       return next(new BadRequestError("Username already taken"));
 
@@ -22,6 +26,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     const user = new User();
     user.username = username;
     user.password = hashedPassword;
+    user.isAdmin = isAdmin;
 
     await userRepository.save(user);
     await queryRunner.commitTransaction();
@@ -51,7 +56,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     if (!isPasswordCorrect) return next(new BadRequestError("Incorrect password"));
 
     const token = jwt.sign(
-      { id: user!.id, username: user!.username },
+      { id: user!.id, username: user!.username, role: user!.isAdmin ? "admin" : "user" },
       process.env.JWT_SECRET as string,
       { expiresIn: "24h" }
     );

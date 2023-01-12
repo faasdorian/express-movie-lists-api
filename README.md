@@ -32,6 +32,18 @@ The idea is to keep this project as simple as possible, so it can be used as a r
     "password": "$trongP@ssw0rd3x4mpl3"
   }
   ```
+  To register a new admin user, add the `isAdmin` property to the request body and set it to `true`:
+  ```
+  {
+    "username": "admin",
+    "password": "$trongP@ssw0rd3x4mpl3",
+    "isAdmin": true
+  }
+  ```
+  The admin user will be created with the `isAdmin` property set to `true` in the database.
+  To create a new admin user, the logged user must be an admin user.
+  You can create the first admin user by setting the field `isAdmin` to true manually in the database.
+  
 - `POST /auth/login` - Login an user
   ```
   {
@@ -65,6 +77,7 @@ The idea is to keep this project as simple as possible, so it can be used as a r
       - page
       - limit
     - All lists (private and public) from the logged user will be returned if no userId is specified
+    - Only public lists from the specified user will be returned if a userId is specified
 
 - `GET /list/:listId` - Get a specific list with its items
 
