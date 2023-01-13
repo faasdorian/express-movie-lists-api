@@ -55,6 +55,7 @@ export const updateList = async (req: Request, res: Response, next: NextFunction
 
     list.title = title ?? list.title;
     list.privacy = privacy ?? list.privacy;
+    list.updatedAt = new Date();
 
     await listRepository.save(list);
     await queryRunner.commitTransaction();
