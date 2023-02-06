@@ -19,7 +19,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     if (tokenUserRole !== "admin" && isAdmin)
       return next(new BadRequestError("Only admins can create admin users"));
 
-    if (await userRepository.findOne({ where: { username } }))
+    if (await userRepository.findOne({ where: { username }, withDeleted: true }))
       return next(new BadRequestError("Username already taken"));
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +32,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     await queryRunner.commitTransaction();
 
     await queryRunner.release();
-    return res.status(201).json({ message: "User created successfully" });
+    return res.status(201).json({ message: "User created successfully", id: user.id });
   } catch (error) {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
