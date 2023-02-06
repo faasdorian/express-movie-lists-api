@@ -15,4 +15,4 @@ app.use("/movie", movie);
 
 app.use(exceptionHandler);
 
-app.listen(3000);
+export default app;
